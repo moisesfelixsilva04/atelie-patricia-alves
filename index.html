@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ateliê Patrícia Alves - Agendamento</title>
+  <style>
+    body {
+      background-color: #fff0f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .agenda-container {
+      background-color: #ffffff;
+      border-radius: 25px;
+      box-shadow: 0 8px 24px rgba(255, 182, 193, 0.4);
+      padding: 30px;
+      max-width: 450px;
+      width: 100%;
+      border: 2px solid #ffb6c1;
+    }
+    h1 {
+      color: #ff69b4;
+      text-align: center;
+      margin-bottom: 5px;
+      font-size: 24px;
+    }
+    .subtitle {
+      color: #777;
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    label {
+      font-weight: 600;
+      color: #db7093;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    input, select {
+      padding: 12px;
+      border: 2px solid #ffe4e1;
+      border-radius: 15px;
+      font-size: 15px;
+      outline: none;
+      background-color: #fffaf0;
+      transition: border-color 0.3s ease;
+    }
+    input:focus, select:focus {
+      border-color: #ff69b4;
+    }
+    .preco-box {
+      background-color: #fff0f5;
+      border: 1px dashed #ff69b4;
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: bold;
+      color: #ff69b4;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+    .btn-whatsapp {
+      width: 100%;
+      background-color: #25d366;
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    .btn-whatsapp:hover {
+      background-color: #128c7e;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="agenda-container">
+    <h1>Ateliê Patrícia Alves</h1>
+    <p class="subtitle">Agende seu horário com facilidade</p>
+
+    <form id="formAgendamento">
+      <div class="form-group">
+        <label for="nome">Seu Nome:</label>
+        <input type="text" id="nome" required placeholder="Digite seu nome completo">
+      </div>
+
+      <div class="form-group">
+        <label for="servico">Selecione o Serviço:</label>
+        <select id="servico" required>
+          <option value="" data-preco="0">Escolha um serviço...</option>
+          <option value="Pé e mão tradicional" data-preco="60">Pé e mão tradicional - R\$ 60,00</option>
+          <option value="Alongamento em acrílico" data-preco="150">Alongamento em acrílico - R\$ 150,00</option>
+          <option value="Alongamento em acrílico + esmaltação em gel" data-preco="140">Alongamento em acrílico + esmaltação em gel - R\$ 140,00</option>
+          <option value="Spa dos pés" data-preco="60">Spa dos pés - R\$ 60,00</option>
+          <option value="Spa dos pés + unhas dos pés" data-preco="90">Spa dos pés + unhas dos pés - R\$ 90,00</option>
+          <option value="Manutenção de alongamento em acrílico" data-preco="100">Manutenção de alongamento em acrílico - R\$ 100,00</option>
+          <option value="Manutenção de alongamento em acrílico + esmaltação em gel" data-preco="130">Manutenção de alongamento em acrílico + esmaltação em gel - R\$ 130,00</option>
+          <option value="Sobrancelha" data-preco="30">Sobrancelha - R\$ 30,00</option>
+          <option value="Só as mãos" data-preco="30">Só as mãos - R\$ 30,00</option>
+          <option value="Só os pés" data-preco="35">Só os pés - R\$ 35,00</option>
+        </select>
+      </div>
+
+      <div class="preco-box" id="precoBox" style="display: none;">
+        Valor do Serviço: <span id="valorServico">R\$ 0,00</span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="data">Data:</label>
+          <input type="date" id="data" required>
+        </div>
+
+        <div class="form-group">
+          <label for="hora">Horário (07:00 às 18:00):</label>
+          <input type="time" id="hora" min="07:00" max="18:00" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-whatsapp">Enviar Agendamento via WhatsApp</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('servico').addEventListener('change', function() {
+      const select = this;
+      const opcaoSelecionada = select.options[select.selectedIndex];
+      const preco = parseFloat(opcaoSelecionada.getAttribute('data-preco'));
+      const precoBox = document.getElementById('precoBox');
+      const valorServico = document.getElementById('valorServico');
+
+      if (preco > 0) {
+        valorServico.textContent = 'R\$ ' + preco.toFixed(2).replace('.', ',');
+        precoBox.style.display = 'block';
+      } else {
+        precoBox.style.display = 'none';
+      }
+    });
+
+    document.getElementById('formAgendamento').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const nome = document.getElementById('nome').value;
+      const servico = document.getElementById('servico').value;
+      const dataInput = document.getElementById('data').value;
+      const dataFormatada = dataInput.split('-').reverse().join('/');
+      const hora = document.getElementById('hora').value;
+
+      if (hora < "07:00" || hora > "18:00") {
+        alert("Por favor, selecione um horário dentro do período de funcionamento (das 07:00 às 18:00).");
+        return;
+      }
+
+      const mensagem = `Olá Patrícia! Gostaria de realizar um agendamento:\n\n` +
+                       `🌸 *Nome:* ${nome}\n` +
+                       `💅 *Serviço:* ${servico}\n` +
+                       `📅 *Data:* ${dataFormatada}\n` +
+                       `⏰ *Horário:* ${hora}`;
+
+      const numeroWhatsapp = "5562995001028";
+      const urlUrl = `https://whatsapp.com{numeroWhatsapp}&text=${encodeURIComponent(mensagem)}`;
+
+      window.open(urlUrl, '_blank');
+    });
+  </script>
+</body>
+</html>
